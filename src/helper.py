@@ -1,12 +1,7 @@
 # helper.py
 from collections import defaultdict
-try:
-    from yahooquery import Ticker
-    YQ_AVAILABLE = True
-except ImportError:
-    import yfinance as yf
-    YQ_AVAILABLE = False
-
+from yahooquery import Ticker
+YQ_AVAILABLE = True
 
 def get_sectors(tickers):
     """
