@@ -14,7 +14,7 @@ from helper import get_active_sectors, build_full_sector_caps
 st.set_page_config(page_title="Portfolio Optimizer", layout="wide")
 st.title("📈 Portfolio Optimizer")
 st.caption("Developed by Owen Doucet")
-st.markdown("[Connect with me on LinkedIn](https://www.linkedin.com/in/your-profile/)")
+st.markdown("[Connect with me on LinkedIn](https://www.linkedin.com/in/owen-doucet-2151b7336/)")
 
 
 # -------------------------
