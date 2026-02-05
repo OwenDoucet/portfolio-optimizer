@@ -1,5 +1,7 @@
 import numpy as np
 from portfolio import portfolio_risk, portfolio_return
+import pandas as pd
+
 def generate_frontier(mu, Sigma, n_portfolios=3000):
     n = len(mu)
     risks = []
