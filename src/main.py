@@ -98,10 +98,6 @@ if st.button("Run Optimization"):
         )
         st.altair_chart(pie_chart, use_container_width=True)
 
-        rcol1, col2 = st.columns(2)
-        col1.metric("Expected Return", f"{portfolio_return(weights, mu):.2%}")
-        col2.metric("Portfolio Risk", f"{portfolio_risk(weights, Sigma):.2%}")
-
         st.subheader("Efficient Frontier")
 
         # Generate frontier points
