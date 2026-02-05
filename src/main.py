@@ -134,6 +134,12 @@ if st.button("Run Optimization"):
             ]
         )
 
-        st.altair_chart(
-            frontier_chart + optimal_chart, use_container_width=True
+        layered_chart = alt.layer(
+            frontier_chart,
+            optimal_chart
+        ).resolve_scale(
+            x="shared",
+            y="shared"
         )
+
+        st.altair_chart(layered_chart, use_container_width=True)
