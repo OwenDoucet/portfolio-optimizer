@@ -6,17 +6,8 @@ def get_sectors(tickers):
 
     for t in tickers:
         try:
-            ticker = yf.Ticker(t)
-            # First try fast_info if available
-            sector = getattr(ticker.fast_info, 'sector', None)
-
-            # Fallback to .info if fast_info fails
-            if not sector:
-                sector = ticker.info.get("sector", "Unknown")
-
-            # If still missing, set as Unknown
-            sectors[t] = sector if sector else "Unknown"
-
+            info = yf.Ticker(t).info
+            sectors[t] = info.get("sector", "Unknown")
         except Exception:
             sectors[t] = "Unknown"
 
