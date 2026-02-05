@@ -1,31 +1,15 @@
 # helper.py
 from collections import defaultdict
-from yahooquery import Ticker
-YQ_AVAILABLE = True
+import yfinance as yf
 
 def get_sectors(tickers):
-    """
-    Returns a dictionary mapping tickers to their sector.
-    Falls back to 'Unknown' if sector info is unavailable.
-    Uses yahooquery if installed, else falls back to yfinance.
-    """
     sectors = {}
-
-    if YQ_AVAILABLE:
-        tickers_obj = Ticker(tickers)
-        for t in tickers:
-            try:
-                profile = tickers_obj.asset_profile.get(t, {})
-                sectors[t] = profile.get("sector", "Unknown")
-            except Exception:
-                sectors[t] = "Unknown"
-    else:
-        for t in tickers:
-            try:
-                info = yf.Ticker(t).info
-                sectors[t] = info.get("sector", "Unknown")
-            except Exception:
-                sectors[t] = "Unknown"
+    for t in tickers:
+        try:
+            info = yf.Ticker(t).info
+            sectors[t] = info.get("sector", "Unknown")
+        except Exception:
+            sectors[t] = "Unknown"
 
     return sectors
 
