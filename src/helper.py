@@ -10,6 +10,7 @@ def get_sectors(tickers):
             sectors[t] = info.get("sector", "Unknown")
         except Exception:
             sectors[t] = "Unknown"
+    print(sectors)
 
     return sectors
 
