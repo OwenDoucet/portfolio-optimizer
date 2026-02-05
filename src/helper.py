@@ -6,12 +6,16 @@ def get_sectors(tickers):
     sectors = {}
     for t in tickers:
         try:
-            info = yf.Ticker(t).info
-            sectors[t] = info.get("sector", "Unknown")
+            ticker_obj = yf.Ticker(t)
+            info = ticker_obj.info
+            sector = info.get("sector")
+            if not sector or sector.strip() == "":
+                sector = "Unknown"
+            sectors[t] = sector
         except Exception:
             sectors[t] = "Unknown"
-
     return sectors
+
 
 
 def build_sector_indices(tickers, sectors):
