@@ -6,8 +6,17 @@ def get_sectors(tickers):
 
     for t in tickers:
         try:
-            info = yf.Ticker(t).info
-            sectors[t] = info.get("sector", "Unknown")
+            ticker = yf.Ticker(t)
+            # First try fast_info if available
+            sector = getattr(ticker.fast_info, 'sector', None)
+
+            # Fallback to .info if fast_info fails
+            if not sector:
+                sector = ticker.info.get("sector", "Unknown")
+
+            # If still missing, set as Unknown
+            sectors[t] = sector if sector else "Unknown"
+
         except Exception:
             sectors[t] = "Unknown"
 
@@ -17,7 +26,7 @@ def build_sector_indices(tickers, sectors):
     sector_idx = defaultdict(list)
 
     for i, t in enumerate(tickers):
-        sector = sectors.get(t, "Uknown")
+        sector = sectors.get(t, "Unknown")
         sector_idx[sector].append(i)
     return sector_idx
 
