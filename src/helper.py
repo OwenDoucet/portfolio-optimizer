@@ -1,31 +1,23 @@
 import yfinance as yf
 from collections import defaultdict
-import time
 
 def get_sectors(tickers):
     sectors = {}
-    tickers_str = " ".join(tickers)
-    batch = yf.Tickers(tickers_str)
 
     for t in tickers:
         try:
-            info = batch.tickers[t].info
-            # Retry if sector is unknown
-            if not info.get("sector"):
-                time.sleep(0.1)  # tiny delay
-                info = yf.Ticker(t).info
+            info = yf.Ticker(t).info
             sectors[t] = info.get("sector", "Unknown")
         except Exception:
             sectors[t] = "Unknown"
 
     return sectors
 
-
 def build_sector_indices(tickers, sectors):
     sector_idx = defaultdict(list)
 
     for i, t in enumerate(tickers):
-        sector = sectors.get(t, "Unknown")
+        sector = sectors.get(t, "Uknown")
         sector_idx[sector].append(i)
     return sector_idx
 
