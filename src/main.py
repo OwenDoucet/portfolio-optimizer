@@ -121,23 +121,28 @@ if st.button("Run Optimization"):
             .encode(
                 **base_encoding,
                 tooltip=[
-                    alt.Tooltip("Risk", format=".2%"),
-                    alt.Tooltip("Return", format=".2%"),
-                ]
+                    alt.Tooltip("Risk:Q", format=".2%"),
+                    alt.Tooltip("Return:Q", format=".2%"),
+                ],
             )
         )
+
         optimal_chart = (
             alt.Chart(optimal_point)
             .mark_point(size=200, shape="diamond", color="red")
-            .encode(**base_encoding)
+            .encode(
+                **base_encoding,
+                tooltip=[
+                    alt.Tooltip("Risk:Q", format=".2%"),
+                    alt.Tooltip("Return:Q", format=".2%"),
+                ],
+            )
         )
 
         layered_chart = alt.layer(
             frontier_chart,
             optimal_chart
-        ).resolve_scale(
-            x="shared",
-            y="shared"
         )
 
         st.altair_chart(layered_chart, use_container_width=True)
+
