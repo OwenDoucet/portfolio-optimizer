@@ -110,28 +110,26 @@ if st.button("Run Optimization"):
             "Return": [portfolio_return(weights, mu)]
         })
 
-        frontier_chart = alt.Chart(frontier_df).mark_circle(
-            size = 30,
-            opacity = 0.4
-        ).encode(
-            x=alt.X("Risk", title="Portfolio Risk"),
-            y=alt.Y("Return", title="Expected Return"),
-            tooltip=[
-                alt.Tooltip("Risk", format=".2%f"),
-                alt.Tooltip("Return", format=".2%f")
-            ]
+        base_encoding = {
+            "x": alt.X("Risk:Q", title="Portfolio Risk"),
+            "y": alt.Y("Return:Q", title="Expected Return"),
+        }
+
+        frontier_chart = (
+            alt.Chart(frontier_df)
+            .mark_circle(size=30, opacity=0.4)
+            .encode(
+                **base_encoding,
+                tooltip=[
+                    alt.Tooltip("Risk", format=".2%"),
+                    alt.Tooltip("Return", format=".2%"),
+                ]
+            )
         )
-        optimal_chart = alt.Chart(optimal_point).mark_point(
-            size=200,
-            shape="diamond",
-            color="red"
-        ).encode(
-            x="Risk",
-            y="Return",
-            tooltip=[
-                alt.Tooltip("Risk", format=".2%"),
-                alt.Tooltip("Return", format=".2%")
-            ]
+        optimal_chart = (
+            alt.Chart(optimal_point)
+            .mark_point(size=200, shape="diamond", color="red")
+            .encode(**base_encoding)
         )
 
         layered_chart = alt.layer(
