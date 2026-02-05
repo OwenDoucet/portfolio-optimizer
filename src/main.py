@@ -114,8 +114,8 @@ if st.button("Run Optimization"):
             size = 30,
             opacity = 0.4
         ).encode(
-            x=alt.x("Risk", title="Portfolio Risk"),
-            y=alt.y("Return", title="Expected Return"),
+            x=alt.X("Risk", title="Portfolio Risk"),
+            y=alt.Y("Return", title="Expected Return"),
             tooltip=[
                 alt.Tooltip("Risk", format=".2%f"),
                 alt.Tooltip("Return", format=".2%f")
