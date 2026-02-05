@@ -17,7 +17,7 @@ def build_sector_indices(tickers, sectors):
     sector_idx = defaultdict(list)
 
     for i, t in enumerate(tickers):
-        sector = sectors.get(t, "Uknown")
+        sector = sectors.get(t, "Unknown")
         sector_idx[sector].append(i)
     return sector_idx
 
