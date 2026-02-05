@@ -38,7 +38,6 @@ sectors, active_sectors = get_active_sectors(tickers)
 
 user_sector_caps = {}
 if st.sidebar.checkbox("Set sector max caps"):
-    st.write(sectors, active_sectors)
     st.sidebar.subheader("Sector Max Caps")
     for sector in active_sectors:
         user_sector_caps[sector] = st.sidebar.slider(
