@@ -7,7 +7,7 @@ from portfolio import compute_returns, expected_returns, covariance_matrix, port
 from optimizer import maximize_return_given_risk
 from max_sharpe import maximize_sharpe
 from helper import get_active_sectors, build_full_sector_caps
-from frontier import generate_efficient_frontier
+from frontier import generate_frontier
 
 # -------------------------
 # App Title
@@ -98,51 +98,43 @@ if st.button("Run Optimization"):
         )
         st.altair_chart(pie_chart, use_container_width=True)
 
-        risks, rets, _ = generate_efficient_frontier(mu, Sigma)
+        rcol1, col2 = st.columns(2)
+        col1.metric("Expected Return", f"{portfolio_return(weights, mu):.2%}")
+        col2.metric("Portfolio Risk", f"{portfolio_risk(weights, Sigma):.2%}")
 
         st.subheader("Efficient Frontier")
-        frontier_df = pd.DataFrame({
-            "Risks": risks,
-            "Return": rets
-        })
-        optimal_point = pd.DataFrame({
-            "Risk": [portfolio_risk(weights, Sigma)],
-            "Return": [portfolio_return(weights, mu)]
-        })
 
-        base_encoding = {
-            "x": alt.X("Risk:Q", title="Portfolio Risk"),
-            "y": alt.Y("Return:Q", title="Expected Return"),
-        }
+        # Generate frontier points
+        frontier_df = generate_frontier(mu, Sigma)
 
-        frontier_chart = (
-            alt.Chart(frontier_df)
-            .mark_circle(size=30, opacity=0.4)
-            .encode(
-                **base_encoding,
-                tooltip=[
-                    alt.Tooltip("Risk:Q", format=".2%"),
-                    alt.Tooltip("Return:Q", format=".2%"),
-                ],
-            )
+        # Optimal portfolio point
+        optimal_df = pd.DataFrame([{
+            "Risk": portfolio_risk(weights, Sigma),
+            "Return": portfolio_return(weights, mu),
+        }])
+
+        # Frontier scatter
+        frontier_chart = alt.Chart(frontier_df).mark_circle(
+            size=25,
+            opacity=0.35
+        ).encode(
+            x=alt.X("Risk:Q", title="Portfolio Risk"),
+            y=alt.Y("Return:Q", title="Expected Return"),
         )
 
-        optimal_chart = (
-            alt.Chart(optimal_point)
-            .mark_point(size=200, shape="diamond", color="red")
-            .encode(
-                **base_encoding,
-                tooltip=[
-                    alt.Tooltip("Risk:Q", format=".2%"),
-                    alt.Tooltip("Return:Q", format=".2%"),
-                ],
-            )
+        # Optimal point
+        optimal_chart = alt.Chart(optimal_df).mark_point(
+            size=200,
+            shape="diamond",
+            color="red"
+        ).encode(
+            x="Risk:Q",
+            y="Return:Q",
         )
 
-        layered_chart = alt.layer(
-            frontier_chart,
-            optimal_chart
-        )
+        # Layer charts
+        layered_chart = alt.layer(frontier_chart, optimal_chart)
 
         st.altair_chart(layered_chart, use_container_width=True)
+
 
